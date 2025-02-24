@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
 from typing import Dict, Any, List, Optional
-import uvicorn
+# import uvicorn
 from datetime import datetime,timedelta
 import os
 from dotenv import load_dotenv

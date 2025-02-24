@@ -1,16 +1,21 @@
-
 import os
 import argparse
 import streamlit as st
 from feedback_evaluator import HealthAgentWithFeedback, evaluate_feedback
-from mood_predictor import mood_predictor_result
+from mood_predictor import mood_predictor_result, load_sensor_data
 
-def create_streamlit_interface_with_feedback(sleep_quality_predictor, args):
+def create_streamlit_interface_with_feedback( args):
     st.title("Sleep Quality Predictor")
 
     # Initialize HealthAgent and load mood predictor results
     health_agent = HealthAgentWithFeedback()
     predictor, predictions, analysis = mood_predictor_result()
+
+
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(current_dir, 'ifh_affect_short')
+    samsung_data, oura_data = load_sensor_data(data_dir)
+
 
     # Create tabs for the UI
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
@@ -46,12 +51,12 @@ def create_streamlit_interface_with_feedback(sleep_quality_predictor, args):
 
     # ---------------------- Tab 5: progress feedback  ----------------------
     with tab5:
-        st.header("Chat Assistant")
+        st.header(" feedback data ")
         # First,extract results from past days
         features = predictor.extract_mood_features(
             # Replace these dummy parameters with the actual sensor data dictionaries.
-            samsung_data={'imu': predictions, 'pedometer': predictions, 'ppg': predictions},
-            oura_data={'activity': predictions, 'sleep': predictions, 'readiness': predictions}
+            samsung_data=samsung_data,
+            oura_data=oura_data
         )
 
         # Ensure that the features DataFrame has a "date" column.
@@ -114,6 +119,7 @@ def create_streamlit_interface_with_feedback(sleep_quality_predictor, args):
         chat_response = health_agent.get_chat_response(chat_prompt, health_params)
         st.markdown("#### Chatbot Response:")
         st.write(chat_response)
+        print( "done done ")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='sensor path')
@@ -126,7 +132,8 @@ if __name__ == "__main__":
     # Uncomment and set these if needed:
     # OURA_PATH = args.data_path + '/par_' + str(args.par_ID) + '/oura/'
     # SAMSUNG_PATH = args.data_path + '/par_' + str(args.par_ID) + '/samsung/'
-
+    OURA_PATH =""
+    SAMSUNG_PATH = ""
     st.sidebar.markdown("## Directory Contents")
     if os.path.exists(OURA_PATH):
         st.sidebar.write("Oura directory contents:")
@@ -136,4 +143,4 @@ if __name__ == "__main__":
         st.sidebar.write([f for f in os.listdir(SAMSUNG_PATH) if f.endswith('.csv')])
 
     # Create the Streamlit interface
-    create_streamlit_interface_with_feedback(mood_predictor_obj, args)
+    create_streamlit_interface_with_feedback( args)

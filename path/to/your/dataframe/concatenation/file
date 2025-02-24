@@ -1,0 +1,4 @@
+# Before concatenating DataFrames, filter out empty or all-NA columns
+df = df.dropna(how='all', axis=1)
+
+# ... existing code ... 

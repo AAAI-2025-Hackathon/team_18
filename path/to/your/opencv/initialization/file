@@ -1,0 +1,6 @@
+import os
+
+# Set environment variable to handle authorization before initializing camera
+os.environ['OPENCV_AVFOUNDATION_SKIP_AUTH'] = '1'
+
+# ... existing code ... 

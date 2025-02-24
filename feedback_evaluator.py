@@ -1,7 +1,7 @@
 
 import os
 import streamlit as st
-
+import math
 from mood_streamlit import HealthAgent
 
 class HealthAgentWithFeedback(HealthAgent):
@@ -88,7 +88,11 @@ def evaluate_feedback(initial_features, feedback_features, predictor, health_age
     # compute average activity score and find delta,
     if 'activity_score' in initial_features.columns and 'activity_score' in feedback_features.columns:
         initial_avg_activity = initial_features['activity_score'].mean()
+        if math.isnan(initial_avg_activity):
+            initial_avg_activity = -100
         feedback_avg_activity = feedback_features['activity_score'].mean()
+        if math.isnan(feedback_avg_activity):
+            initial_avg_activity = -100
         activity_delta = feedback_avg_activity - initial_avg_activity
     else:
         activity_delta = None

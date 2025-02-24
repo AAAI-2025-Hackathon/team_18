@@ -1,0 +1,68 @@
+import cv2
+import numpy as np
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+def detect_face(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), flags=cv2.CASCADE_SCALE_IMAGE)
+    if len(faces) == 0:
+        raise ValueError("No faces detected. Please try again")
+    return faces
+
+def preprocess_image(image):
+    # Convert to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # Histogram equalization for better contrast
+    equ = cv2.equalizeHist(gray)
+    return equ
+
+def detect_face_advanced(image):
+    # Load DNN model
+    model = cv2.dnn.readNetFromCaffe('deploy.prototxt', 'weights.caffemodel')
+    h, w = image.shape[:2]
+    blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
+    model.setInput(blob)
+    detections = model.forward()
+    # Process detections
+    for i in range(0, detections.shape[2]):
+        confidence = detections[0, 0, i, 2]
+        if confidence > 0.5:
+            box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+            (startX, startY, endX, endY) = box.astype("int")
+            return (startX, startY, endX, endY)
+    raise ValueError("No faces detected. Please try again")
+
+# Assuming you have a function to display messages to the user
+display_user_message("Please ensure your face is well-lit and fully visible in the frame.") 
+
+
+# import cv2
+# import numpy as np
+# import streamlit as st
+# from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
+
+# face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+# class VideoTransformer(VideoTransformerBase):
+#     def transform(self, frame):
+#         img = frame.to_ndarray(format="bgr24")
+#         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), flags=cv2.CASCADE_SCALE_IMAGE)
+#         for (x, y, w, h) in faces:
+#             cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+#         return img
+
+# def main():
+#     st.title("Face Detection with Streamlit")
+#     st.write("Please ensure your face is well-lit and fully visible in the frame.")
+
+#     webrtc_ctx = webrtc_streamer(
+#         key="example",
+#         video_transformer_factory=VideoTransformer,
+#         async_transform=True,
+#     )
+
+#     if webrtc_ctx.video_transformer:
+#         st.write("Face detection is active. Look at the camera!")
+
+# if __name__ == "__main__":
+#     main()

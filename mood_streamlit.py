@@ -20,24 +20,13 @@ import openai
 
 from mood_predictor import *
 
-openai_api_key_input= ''
+openai_api_key_input= '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'
 
 # Load environment variables
 load_dotenv()
 
 app = FastAPI()
 
-#############################################################################
-st.set_page_config(
-      page_title="Health_AI_Hackathon_team57",
-      page_icon=":)",
-      layout="wide",
-      initial_sidebar_state="expanded",
-      menu_items={
-          'Get Help': 'https://github.com/siamaky1984/health_AI_hackathon/',
-          'About': "# Welcome to your personalized Health and Wellness Recommendation app!"
-      }
-  )
 
 st.markdown("""
 <style>
@@ -53,25 +42,6 @@ st.markdown("""
 
 #############################################################################
 #Configuring the title and sidebar for the app created by streamlit
-
-#st.title("The Generative AI in Health Hackathon Project")
-st.markdown('<p class="big-font"> Welcome to your personalized Health and Wellness Recommendation app!  </p>', unsafe_allow_html=True)
-st.markdown('<p class="big-font">  </p>', unsafe_allow_html=True)
-
-st.sidebar.markdown('<p class="medium-font">The Generative AI in Health Hackathon Project</p> Siamak Yousefi, Hanieh Haeri, Smaneh Movassaghi </p>', unsafe_allow_html=True)
-
-
-st.sidebar.markdown('<p class="small-font">This is a simple app created to analyze sleep and activity data collected\
-                        from multiple participants and sensors such as Samsung watch, Oura, imu, ppg, and etc.\
-                        The data source can be further studied at https://datadryad.org/stash/dataset/doi:10.7280/D1WH6T  </p> \
-                    <p>This app analyses a participants sleep and activity and provides timeseries of health vitals as well as\
-                    some basic statistics for these vitals.\
-                    <p> The participant can further explore the app and receive mutimodal health recommendations along with\
-                    references to visit as needed.</p> \
-                    <p>For more information, visit our Git Hub at https://github.com/siamaky1984/health_AI_hackathon</p> \
-                    Comments? <p>Email: </p>'
-                    , unsafe_allow_html=True)
-###########################################################################
 
 
     

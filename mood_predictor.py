@@ -449,8 +449,10 @@ def train_mood_predictor(data_directory):
 # Usage example
 def mood_predictor_result():
     # Specify your data directory
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(current_dir, 'ifh_affect_short')
+    # current_dir = os.path.dirname(os.path.abspath(__file__))
+    # data_dir = os.path.join(current_dir, 'ifh_affect_short')
+
+    data_dir = "/Users/samanehmovassaghi/Downloads/EmoSenseAI/src/ifh_affect_short"
     
     # Train the predictor
     predictor, features = train_mood_predictor(data_dir)
